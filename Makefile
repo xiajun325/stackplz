@@ -17,6 +17,11 @@ BUILD_TAGS := -tags forarm
 TARGET_ARCH = arm
 endif
 
+ifeq ($(BUILD_TAGS),forx86_64)
+BUILD_TAGS := -tags forx86_64
+TARGET_ARCH = x86_64
+endif
+
 .PHONY: all
 all: ebpf_stack ebpf_syscall ebpf_perf_mmap genbtf assets build
 	@echo $(shell date)
@@ -90,4 +95,7 @@ assets:
 
 .PHONY: build
 build:
-	GOARCH=arm64 GOOS=android CGO_ENABLED=1 CC=aarch64-linux-android29-clang $(CMD_GO) build $(BUILD_TAGS) -ldflags "-w -s -extldflags '-Wl,--hash-style=sysv'" -o bin/stackplz_$(TARGET_ARCH) .
+ 	ifeq ($(TARGET_ARCH),x86_64)
+		GOARCH=amd64 GOOS=android CGO_ENABLED=1 CC=x86_64-linux-android21-clang $(CMD_GO) build $(BUILD_TAGS) -ldflags "-w -s -extldflags '-Wl,--hash-style=sysv'" -o bin/stackplz_$(TARGET_ARCH) .
+	else
+		GOARCH=arm64 GOOS=android CGO_ENABLED=1 CC=aarch64-linux-android29-clang $(CMD_GO) build $(BUILD_TAGS) -ldflags "-w -s -extldflags '-Wl,--hash-style=sysv'" -o bin/stackplz_$(TARGET_ARCH) .

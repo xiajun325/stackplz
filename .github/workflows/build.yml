@@ -48,6 +48,11 @@ jobs:
         export PATH=$ANDROID_NDK_HOME/toolchains/llvm/prebuilt/linux-x86_64/bin:$PATH
         make clean && BUILD_TAGS=forarm make
         make clean && make
+    
+    - name: Build x86_64
+      run: |
+        export PATH=$ANDROID_NDK_HOME/toolchains/llvm/prebuilt/linux-x86_64/bin:$PATH
+        make clean && BUILD_TAGS=forx86_64 make
 
     - name: Upload a Build Artifact
       uses: actions/upload-artifact@v4
@@ -60,3 +65,9 @@ jobs:
       with:
         name: stackplz_arm64
         path: bin/stackplz_arm64
+
+    - name: Upload a Build Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: stackplz_x86_64
+        path: bin/stackplz_x86_64
