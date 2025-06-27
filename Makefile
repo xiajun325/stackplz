@@ -95,8 +95,11 @@ assets:
 
 .PHONY: build
 build:
- 	ifeq ($(TARGET_ARCH),x86_64)
-		GOARCH=amd64 GOOS=android CGO_ENABLED=1 CC=x86_64-linux-android21-clang $(CMD_GO) build $(BUILD_TAGS) -ldflags "-w -s -extldflags '-Wl,--hash-style=sysv'" -o bin/stackplz_$(TARGET_ARCH) .
-	else
-		GOARCH=arm64 GOOS=android CGO_ENABLED=1 CC=aarch64-linux-android29-clang $(CMD_GO) build $(BUILD_TAGS) -ldflags "-w -s -extldflags '-Wl,--hash-style=sysv'" -o bin/stackplz_$(TARGET_ARCH) .
-	endif
+ifeq ($(TARGET_ARCH),x86_64)
+	GOARCH=amd64 GOOS=android CGO_ENABLED=1 CC=x86_64-linux-android21-clang $(CMD_GO) build $(BUILD_TAGS) -ldflags "-w -s -extldflags '-Wl,--hash-style=sysv'" -o bin/stackplz_$(TARGET_ARCH) .
+else
+	GOARCH=arm64 GOOS=android CGO_ENABLED=1 CC=aarch64-linux-android29-clang $(CMD_GO) build $(BUILD_TAGS) -ldflags "-w -s -extldflags '-Wl,--hash-style=sysv'" -o bin/stackplz_$(TARGET_ARCH) .
+endif
+
+
+
